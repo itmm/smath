@@ -195,7 +195,6 @@ Zuerst muss wieder der Prototyp in `smath.h` deklariert werden:
 	char* sm_int_add(
 		char* begin, char* end, const sm_int_p a, const sm_int_p b
 	);
-// ...
 ```
 
 In `smath.c` erfolgt die Implementierung:
@@ -218,4 +217,26 @@ char* sm_int_add(char* begin, char* end, const sm_int_p a, const sm_int_p b) {
 	}
 	return result;
 }
+```
+
+Weitere Tests in `t_smath.c`:
+
+```c
+// ...
+	// TESTS
+	{
+		char buffer2[5];
+		char* buffer_end2 = buffer2 + sizeof(buffer2);
+		struct sm_int a; sm_int_from_cstr(&a, "512");
+		char* start = sm_int_add(buffer2, buffer_end2, &a, NULL);
+		ASSERT(start == NULL);
+		start = sm_int_add(buffer2, buffer_end2, NULL, &a);
+		ASSERT(start == NULL);
+		start = sm_int_add(buffer2, NULL, &a, &a);
+		ASSERT(start == NULL);
+		start = sm_int_add(NULL, buffer_end2, &a, &a);
+		ASSERT(start == NULL);
+	}
+	{
+// ...
 ```

@@ -16,6 +16,20 @@ int main(void) {
 	// TESTS
 #line 68 "1_naturals.md"
 	{
+#line 228
+		char buffer2[5];
+		char* buffer_end2 = buffer2 + sizeof(buffer2);
+		struct sm_int a; sm_int_from_cstr(&a, "512");
+		char* start = sm_int_add(buffer2, buffer_end2, &a, NULL);
+		ASSERT(start == NULL);
+		start = sm_int_add(buffer2, buffer_end2, NULL, &a);
+		ASSERT(start == NULL);
+		start = sm_int_add(buffer2, NULL, &a, &a);
+		ASSERT(start == NULL);
+		start = sm_int_add(NULL, buffer_end2, &a, &a);
+		ASSERT(start == NULL);
+	}
+	{
 #line 179
 		char buffer[5];
 		char* buffer_end = buffer + sizeof(buffer);
