@@ -28,9 +28,9 @@ Timestamp-Datei wird die Extraktion unnötig oft aufgerufen.
 Hier ist die Extraktion in der Datei `./Makefile`:
 
 ```make
-.PHONY: run-tests
+.PHONY: all tests
 
-run-tests: extracted-ts
+all: extracted-ts
 	@$(MAKE) tests
 
 extracted-ts: $(wildcard *.md)
@@ -40,6 +40,18 @@ extracted-ts: $(wildcard *.md)
 	@date >$@
 ```
 
+Das sieht etwas umständlich aus. Leider kann `make` nicht automatisch
+erkennen, welche Dateien sich in einem Schritt geändert haben. Es geht nur
+von der Target-Datei aus.
+
+Die Extraktion kann aber einen ganzen Berg an Dateien ändern. Daher muss
+nach der Extraktion `make` noch einmal neu aufgerufen werden, um diese
+Änderungen zu erkennen.
+
+Daher der zusätzliche Default-Target `all`, der die Extraktion antriggert,
+aber in jedem Fall aus ausführen der Unit-Tests in einem eigenen
+`make`-Prozess durchführt.
+
 
 ## Unit-Tests bauen
 
@@ -47,7 +59,6 @@ Ich habe einen virtuellen Target `tests`, der nur für das Ausführen der
 Unit-Tests zuständig ist:
 
 ```make
-.PHONY: tests
 // ...
 
 // ...
@@ -58,6 +69,12 @@ tests: t_smath
 	@echo running unit-tests
 	@./t_smath
 ```
+
+Dadurch, dass der Target virtuell ist, wird er bei jedem Aufruf von `make`
+ausgeführt.
+
+Das Executable der Unit-Tests benötigt neben der Objekt-Datei der Tests auch
+die Library, die statisch gelinkt wird:
 
 ```make
 // ...
@@ -72,17 +89,65 @@ t_smath: t_smath.o libsmath.a
 	$(CC) $^ -o $@
 
 t_smath.o: t_smath.c smath.h
+```
+
+Hier ist der Rahmen für das Ausführen der Unit-Tests in der Datei `t_smath.c`:
+
+```c
+#include <assert.h>
+#include <stdio.h>
+
+#include "smath.h"
+
+int test_count = 0;
+
+#define ASSERT(...) ++test_count; assert(__VA_ARGS__)
+
+int main(void) {
+	// TESTS
+	printf("%d tests ok\n", test_count);
+}
+```
+
+Ich habe das Makro `assert` etwas aufgebohrt und zähle die Aufrufe mit. So
+habe ich ein schnelles Feedback, dass neue Tests auch wirklich ausgeführt
+werden.
+
+## Library erstellen
+
+Zurück in der Datei `./Makefile` baue ich eine statische Library mit dem
+Object-Code.
+
+```make
+// ...
+
+// ...
+
+// ...
+
+// ...
+
+// ...
+
+// ...
 
 libsmath.a: smath.o
 	$(AR) -cr $@ $^
 
 smath.o: smath.c smath.h
-
 ```
+
+## Temporäre Dateien löschen
+
+In diesem Schritt lösche ich temporäre Dateien. Die Source-Dateien werden
+nur dann als temporär angesehen, wenn sie mit `md-patcher` neu gebaut werden
+können.
 
 ```make
 .PHONY: clean
 // ...
+
+CFLAGS += -std=c17 -Wall -pedantic
 
 // ...
 
@@ -99,5 +164,7 @@ smath.o: smath.c smath.h
 // ...
 
 clean:
+	@echo "remove temopraries"
 	@rm -f libsmath.a t_smath *.o extracted-ts
+	@[ -x "$$(command -v mdp)" ] && rm -f t_smath.c
 ```

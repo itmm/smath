@@ -1,8 +1,9 @@
 .PHONY: clean
-.PHONY: tests
-.PHONY: run-tests
+.PHONY: all tests
 
-run-tests: extracted-ts
+CFLAGS += -std=c17 -Wall -pedantic
+
+all: extracted-ts
 	@$(MAKE) tests
 
 extracted-ts: $(wildcard *.md)
@@ -26,4 +27,6 @@ libsmath.a: smath.o
 smath.o: smath.c smath.h
 
 clean:
+	@echo "remove temopraries"
 	@rm -f libsmath.a t_smath *.o extracted-ts
+	@[ -x "$$(command -v mdp)" ] && rm -f t_smath.c
