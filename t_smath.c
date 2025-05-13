@@ -2,6 +2,9 @@
 #include <assert.h>
 #include <stdbool.h>
 #include <stdio.h>
+#line 187 "1_naturals.md"
+#include <string.h>
+#line 100 "a_build-system.md"
 
 #include "smath.h"
 
@@ -12,6 +15,15 @@ int test_count = 0;
 int main(void) {
 	// TESTS
 #line 68 "1_naturals.md"
+	{
+#line 191
+		char buffer[5];
+		char* buffer_end = buffer + sizeof(buffer);
+		struct sm_int a; sm_int_from_cstr(&a, "512");
+		char* start = sm_int_add(buffer, buffer_end, &a, &a);
+		ASSERT(start == buffer_end - 4);
+		ASSERT(memcmp(start, "1024", 4) == 0);
+	}
 	{
 #line 143
 		const char* c = "123";

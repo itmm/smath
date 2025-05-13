@@ -174,3 +174,72 @@ haben:
 	{
 // ...
 ```
+
+
+## Zahlen addieren
+
+Formulieren wir zuerst wieder einen Test in `t_smath.c`, der Beschreibt, wie
+die Addition von Statten gehen soll:
+
+```c
+// ...
+#include <stdio.h>
+#include <string.h>
+// ...
+	// TESTS
+	{
+		char buffer[5];
+		char* buffer_end = buffer + sizeof(buffer);
+		struct sm_int a; sm_int_from_cstr(&a, "512");
+		char* start = sm_int_add(buffer, buffer_end, &a, &a);
+		ASSERT(start == buffer_end - 4);
+		ASSERT(memcmp(start, "1024", 4) == 0);
+	}
+	{
+// ...
+```
+
+Zuerst muss wieder der Prototyp in `smath.h` deklariert werden:
+
+```c
+// ...
+
+// ...
+
+// ...
+
+// ...
+
+	char* sm_int_add(
+		char* begin, char* end, const sm_int_p a, const sm_int_p b
+	);
+// ...
+```
+
+In `smath.c` erfolgt die Implementierung:
+
+```c
+// ...
+
+// ...
+
+// ...
+
+// ...
+
+char* sm_int_add(char* begin, char* end, const sm_int_p a, const sm_int_p b) {
+	if (! begin || ! end || ! a || ! b || end < begin) { return NULL; }
+	char *result = end;
+	const char* cur_a = a->end;
+	const char* cur_b = b->end;
+	int value = 0;
+	while (cur_a > a->begin || cur_b > b->begin || value) {
+		if (cur_a > a->begin) { --cur_a; value += *cur_a - '0'; }
+		if (cur_b > b->begin) { --cur_b; value += *cur_b - '0'; }
+		if (result <= begin) { return NULL; }
+		--result; *result = (value % 10) + '0';
+		value /= 10;
+	}
+	return result;
+}
+```
