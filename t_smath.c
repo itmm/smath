@@ -35,6 +35,17 @@ int main(void) {
 		ASSERT(i.end == NULL);
 	}
 	{
+		const char* c = "123";
+		struct sm_int i; sm_int_init(&i, c + 2, c);
+		ASSERT(i.begin == NULL);
+		ASSERT(i.end == NULL);
+	}
+	{
+		struct sm_int i; sm_int_init(&i, NULL, "1");
+		ASSERT(i.begin == NULL);
+		ASSERT(i.end == NULL);
+	}
+	{
 #line 69
 		struct sm_int i; sm_int_from_cstr(&i, "000");
 		ASSERT(i.begin == NULL);
