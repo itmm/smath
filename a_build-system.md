@@ -137,11 +137,32 @@ libsmath.a: smath.o
 smath.o: smath.c smath.h
 ```
 
+Das Grundgerüst für den Header `smath.h` sieht so aus:
+
+```c
+#if !defined(smath_h)
+#define smath_h
+
+#endif
+```
+
+Und die eigentliche Library `smath.c` sieht so aus:
+
+```c
+#include <stdbool.h>
+#include <stdlib.h>
+
+#include "smath.h"
+```
+
+Die Dateien habe ich hier angegeben, damit der Build-Prozess ohne Fehler
+läuft.
+
 ## Temporäre Dateien löschen
 
 In diesem Schritt lösche ich temporäre Dateien. Die Source-Dateien werden
 nur dann als temporär angesehen, wenn sie mit `md-patcher` neu gebaut werden
-können.
+können. Dazu muss `./Makefile` angepasst werden:
 
 ```make
 .PHONY: clean
@@ -166,5 +187,5 @@ CFLAGS += -std=c17 -Wall -pedantic
 clean:
 	@echo "remove temopraries"
 	@rm -f libsmath.a t_smath *.o extracted-ts
-	@[ -x "$$(command -v mdp)" ] && rm -f t_smath.c
+	@[ -x "$$(command -v mdp)" ] && rm -f t_smath.c smath.h smath.c
 ```

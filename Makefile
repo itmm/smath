@@ -29,4 +29,4 @@ smath.o: smath.c smath.h
 clean:
 	@echo "remove temopraries"
 	@rm -f libsmath.a t_smath *.o extracted-ts
-	@[ -x "$$(command -v mdp)" ] && rm -f t_smath.c
+	@[ -x "$$(command -v mdp)" ] && rm -f t_smath.c smath.h smath.c
