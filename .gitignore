@@ -1,1 +1,4 @@
 extracted-ts
+libsmath.a
+t_smath
+*.o

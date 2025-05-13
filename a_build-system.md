@@ -28,19 +28,54 @@ Timestamp-Datei wird die Extraktion unnötig oft aufgerufen.
 Hier ist die Extraktion in der Datei `./Makefile`:
 
 ```make
+.PHONY: run-tests
+
+run-tests: extracted-ts
+	@$(MAKE) tests
+
 extracted-ts: $(wildcard *.md)
 	@echo "extracting source code"
 	@[ -x "$$(command -v mdp)" ] || echo "mdp not installed" 1>&2
 	@[ -x "$$(command -v mdp)" ] && mdp README.md
 	@date >$@
-	@$(MAKE) tests
 ```
+
+
+## Unit-Tests bauen
+
+Ich habe einen virtuellen Target `tests`, der nur für das Ausführen der
+Unit-Tests zuständig ist:
 
 ```make
 .PHONY: tests
+// ...
 
 // ...
 
-tests:
-	@echo tests
+// ...
+
+tests: t_smath
+	@echo running unit-tests
+	@./t_smath
+```
+
+```make
+// ...
+
+// ...
+
+// ...
+
+// ...
+
+t_smath: t_smath.o libsmath.a
+	$(CC) $^ -o $@
+
+t_smath.o: t_smath.c smath.h
+
+libsmath.a: smath.o
+	$(AR) -cr $@ $^
+
+smath.o: smath.c smath.h
+
 ```
