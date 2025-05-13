@@ -1,3 +1,4 @@
+.PHONY: clean
 .PHONY: tests
 .PHONY: run-tests
 
@@ -24,3 +25,5 @@ libsmath.a: smath.o
 
 smath.o: smath.c smath.h
 
+clean:
+	@rm -f libsmath.a t_smath *.o extracted-ts
