@@ -1,10 +1,10 @@
-#line 97 "a_build-system.md"
+#line 87 "a_build-system.md"
 #include <assert.h>
 #include <stdbool.h>
 #include <stdio.h>
-#line 187 "1_naturals.md"
+#line 175 "1_naturals.md"
 #include <string.h>
-#line 100 "a_build-system.md"
+#line 90 "a_build-system.md"
 
 #include "smath.h"
 
@@ -16,7 +16,7 @@ int main(void) {
 	// TESTS
 #line 68 "1_naturals.md"
 	{
-#line 191
+#line 179
 		char buffer[5];
 		char* buffer_end = buffer + sizeof(buffer);
 		struct sm_int a; sm_int_from_cstr(&a, "512");
@@ -25,7 +25,7 @@ int main(void) {
 		ASSERT(memcmp(start, "1024", 4) == 0);
 	}
 	{
-#line 143
+#line 131
 		const char* c = "123";
 		struct sm_int i; sm_int_from_cstr(&i, c);
 		ASSERT(i.begin == c);
@@ -63,6 +63,6 @@ int main(void) {
 		ASSERT(i.begin == NULL);
 		ASSERT(i.end == NULL);
 	}
-#line 109 "a_build-system.md"
+#line 99 "a_build-system.md"
 	printf("%d tests ok\n", test_count);
 }

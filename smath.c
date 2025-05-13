@@ -1,12 +1,12 @@
-#line 153 "a_build-system.md"
+#line 133 "a_build-system.md"
 #include <stdbool.h>
 #include <stdlib.h>
-#line 97 "1_naturals.md"
+#line 92 "1_naturals.md"
 #include <string.h>
-#line 155 "a_build-system.md"
+#line 135 "a_build-system.md"
 
 #include "smath.h"
-#line 101 "1_naturals.md"
+#line 94 "1_naturals.md"
 
 void sm_int_from_cstr(sm_int_p num, const char* cstr) {
 	if (cstr) {
@@ -15,8 +15,7 @@ void sm_int_from_cstr(sm_int_p num, const char* cstr) {
 		sm_int_init(num, NULL, NULL);
 	}
 }
-//...
-#line 121
+#line 109
 
 void sm_int_init(sm_int_p num, const char* begin, const char* end) {
 	if (! num) { return; }
@@ -30,7 +29,7 @@ void sm_int_init(sm_int_p num, const char* begin, const char* end) {
 	num->begin = begin;
 	num->end = end;
 }
-#line 229
+#line 205
 
 char* sm_int_add(char* begin, char* end, const sm_int_p a, const sm_int_p b) {
 	if (! begin || ! a || ! b || end < begin) { return NULL; }
