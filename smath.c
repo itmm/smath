@@ -33,16 +33,16 @@ void sm_int_init(sm_int_p num, const char* begin, const char* end) {
 #line 229
 
 char* sm_int_add(char* begin, char* end, const sm_int_p a, const sm_int_p b) {
-	if (! begin || ! end || ! a || ! b || end < begin) { return NULL; }
+	if (! begin || ! a || ! b || end < begin) { return NULL; }
 	char *result = end;
 	const char* cur_a = a->end;
 	const char* cur_b = b->end;
 	int value = 0;
 	while (cur_a > a->begin || cur_b > b->begin || value) {
-		if (cur_a > a->begin) { --cur_a; value += *cur_a - '0'; }
-		if (cur_b > b->begin) { --cur_b; value += *cur_b - '0'; }
+		if (cur_a > a->begin) { value += *--cur_a - '0'; }
+		if (cur_b > b->begin) { value += *--cur_b - '0'; }
 		if (result <= begin) { return NULL; }
-		--result; *result = (value % 10) + '0';
+		*--result = (value % 10) + '0';
 		value /= 10;
 	}
 	return result;
