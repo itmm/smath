@@ -1,0 +1,165 @@
+# Rechnen mit natürlichen Zahlen
+
+## Repräsentation einer Zahl
+
+Eine Zahl wird als String repräsentiert: eine Ziffer pro Byte. Das ist nicht
+sonderlich speicher-effizient, aber es erleichtert das Wandeln in lesbare
+Darstellungen und die Algorithmen kennen wir im Prinzip aus der Schule.
+
+Eine Zahl wird durch zwei Zeiger repräsentiert: einen auf den Anfang und einen
+hinter das letzte Byte. Ich bediene mich dabei den klassichen Iteratoren aus
+C++.
+
+Hier die Implementierung im Header `smath.h`:
+
+```c
+// ...
+
+	struct sm_int {
+		const char* begin;
+		const char* end;
+	};
+
+	typedef struct sm_int* sm_int_p;
+// ...
+```
+
+## Regeln für die Repräsentation einer Zahl
+
+### Kein Speicher-Management
+
+Der Speicher für die Zahlen muss ausserhalb verwaltet werden. Der `sm_int`-Typ
+geht davon aus, dass der Speicher über die Laufzeit der Instanz konstant
+bleibt.
+
+
+### `NULL` repräsentiern 0
+
+Wenn `begin` gleich `NULL` ist, dann muss auch `end` gleich `NULL` sein. Die
+repräsentierte Zahl ist 0. So kann die Zahl 0 ohne zusätzlichen Speicher
+abgebildet werden.
+
+
+### Echter Bereich
+
+Wenn `begin` nicht `NULL` ist, dann darf auch `end` nicht `NULL` sein und es
+muss `begin < end` gelten.
+
+
+### Nur Ziffern
+
+Wenn `begin` nicht `NULL` ist, dann gilt für alle `begin <= x < end`, dass
+`*x` eine dezimale Ziffer (`0` bis `9`) ist.
+
+
+### Keine führenden Nullen
+
+Wenn `begin` nicht `NULL` ist, dann ist `*begin` kein `0`-Zeichen. 
+
+
+## Initialisierung einer Zahl
+
+Bei der Initialisierung wird auf diese Einschränkungen Rücksicht genommen.
+Dazu folgende Tests in `t_smath.c`:
+
+```c
+// ...
+	// TESTS
+	{
+		struct sm_int i; sm_int_from_cstr(&i, "000");
+		ASSERT(i.begin == NULL);
+		ASSERT(i.end == NULL);
+	}
+// ...
+```
+
+Dazu muss in `smath.h` erst einmal die Prototypen zum Initialisiern eines
+Integers angegeben werden:
+
+```c
+// ...
+
+// ...
+
+// ...
+
+	void sm_int_from_cstr(sm_int_p num, const char* cstr);
+	void sm_int_init(sm_int_p num, const char* begin, const char* end);
+// ...
+```
+
+Die Initialisierung von einem C-String in `smath.c` ruft einfach die andere
+Initialisierung auf:
+
+```c
+// ...
+#include <stdlib.h>
+#include <string.h>
+// ...
+
+// ...
+
+void sm_int_from_cstr(sm_int_p num, const char* cstr) {
+	if (cstr) {
+		sm_int_init(num, cstr, cstr + strlen(cstr));
+	} else {
+		sm_int_init(num, NULL, NULL);
+	}
+}
+//...
+```
+
+Die eigentliche Initialisierung prüft, ob die übergebenen Argumente valide
+sind. Ist das nicht der Fall, wird die Zahl auf 0 gesetzt.
+
+```c
+// ...
+
+// ...
+
+// ...
+
+void sm_int_init(sm_int_p num, const char* begin, const char* end) {
+	if (! num) { return; }
+	num->begin = num->end = NULL;
+	if (! begin || begin >= end) { return; }
+	while (*begin == '0' && begin < end) { ++begin; }
+	if (begin >= end) { return; }
+	for (const char* i = begin; i < end; ++i) {
+		if (*i < '0' || *i > '9') { return; }
+	}
+	num->begin = begin;
+	num->end = end;
+}
+```
+
+Nur zur Sicherheit prüfen wir in `t_smath.c`, ob wir alles richtig gemacht
+haben:
+
+```c
+// ...
+	// TESTS
+	{
+		const char* c = "123";
+		struct sm_int i; sm_int_from_cstr(&i, c);
+		ASSERT(i.begin == c);
+		ASSERT(i.end == c + 3);
+	}
+	{
+		struct sm_int i; sm_int_from_cstr(&i, NULL);
+		ASSERT(i.begin == NULL);
+		ASSERT(i.end == NULL);
+	}
+	{
+		struct sm_int i; sm_int_from_cstr(&i, "");
+		ASSERT(i.begin == NULL);
+		ASSERT(i.end == NULL);
+	}
+	{
+		struct sm_int i; sm_int_from_cstr(&i, "03x");
+		ASSERT(i.begin == NULL);
+		ASSERT(i.end == NULL);
+	}
+	{
+// ...
+```

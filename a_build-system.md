@@ -102,7 +102,7 @@ Hier ist der Rahmen für das Ausführen der Unit-Tests in der Datei `t_smath.c`:
 
 int test_count = 0;
 
-#define ASSERT(...) do { ++test_count; assert(__VA_ARGS__) } while(false)
+#define ASSERT(...) do { ++test_count; assert(__VA_ARGS__); } while(false)
 
 int main(void) {
 	// TESTS
