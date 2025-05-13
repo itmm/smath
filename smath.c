@@ -21,8 +21,8 @@ void sm_int_from_cstr(sm_int_p num, const char* cstr) {
 void sm_int_init(sm_int_p num, const char* begin, const char* end) {
 	if (! num) { return; }
 	num->begin = num->end = NULL;
-	if (! begin || begin >= end) { return; }
-	while (*begin == '0' && begin < end) { ++begin; }
+	if (! begin) { return; }
+	while (begin < end && *begin == '0') { ++begin; }
 	if (begin >= end) { return; }
 	for (const char* i = begin; i < end; ++i) {
 		if (*i < '0' || *i > '9') { return; }
