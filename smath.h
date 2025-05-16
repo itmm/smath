@@ -15,7 +15,7 @@
 
 	void sm_int_from_cstr(sm_int_p num, const char* cstr);
 	void sm_int_init(sm_int_p num, const char* begin, const char* end);
-#line 194
+#line 192
 
 	char* sm_int_add(
 		char* begin, char* end, const sm_int_p a, const sm_int_p b

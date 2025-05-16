@@ -29,7 +29,7 @@ void sm_int_init(sm_int_p num, const char* begin, const char* end) {
 	num->begin = begin;
 	num->end = end;
 }
-#line 204
+#line 202
 
 char* sm_int_add(char* begin, char* end, const sm_int_p a, const sm_int_p b) {
 	if (! begin || ! a || ! b || end < begin) { return NULL; }

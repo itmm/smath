@@ -2,7 +2,7 @@
 #include <assert.h>
 #include <stdbool.h>
 #include <stdio.h>
-#line 175 "1_naturals.md"
+#line 174 "1_naturals.md"
 #include <string.h>
 #line 90 "a_build-system.md"
 
@@ -14,23 +14,22 @@ int test_count = 0;
 
 int main(void) {
 	// TESTS
-#line 68 "1_naturals.md"
-	{
-#line 228
-		char buffer2[5];
-		char* buffer_end2 = buffer2 + sizeof(buffer2);
+#line 225 "1_naturals.md"
+	{ // add with NULL arguments
+		char buffer[5];
+		char* buffer_end = buffer + sizeof(buffer);
 		struct sm_int a; sm_int_from_cstr(&a, "512");
-		char* start = sm_int_add(buffer2, buffer_end2, &a, NULL);
+		char* start = sm_int_add(buffer, buffer_end, &a, NULL);
 		ASSERT(start == NULL);
-		start = sm_int_add(buffer2, buffer_end2, NULL, &a);
+		start = sm_int_add(buffer, buffer_end, NULL, &a);
 		ASSERT(start == NULL);
-		start = sm_int_add(buffer2, NULL, &a, &a);
+		start = sm_int_add(buffer, NULL, &a, &a);
 		ASSERT(start == NULL);
-		start = sm_int_add(NULL, buffer_end2, &a, &a);
+		start = sm_int_add(NULL, buffer_end, &a, &a);
 		ASSERT(start == NULL);
 	}
-	{
-#line 179
+#line 177
+	{ // add number to itself
 		char buffer[5];
 		char* buffer_end = buffer + sizeof(buffer);
 		struct sm_int a; sm_int_from_cstr(&a, "512");
@@ -38,41 +37,41 @@ int main(void) {
 		ASSERT(start == buffer_end - 4);
 		ASSERT(memcmp(start, "1024", 4) == 0);
 	}
-	{
-#line 131
+#line 130
+	{ // parse simple number
 		const char* c = "123";
 		struct sm_int i; sm_int_from_cstr(&i, c);
 		ASSERT(i.begin == c);
 		ASSERT(i.end == c + 3);
 	}
-	{
+	{ // parse NULL
 		struct sm_int i; sm_int_from_cstr(&i, NULL);
 		ASSERT(i.begin == NULL);
 		ASSERT(i.end == NULL);
 	}
-	{
+	{ // parse empty string
 		struct sm_int i; sm_int_from_cstr(&i, "");
 		ASSERT(i.begin == NULL);
 		ASSERT(i.end == NULL);
 	}
-	{
+	{ // parse string with non-digits
 		struct sm_int i; sm_int_from_cstr(&i, "03x");
 		ASSERT(i.begin == NULL);
 		ASSERT(i.end == NULL);
 	}
-	{
+	{ // init with end before begin
 		const char* c = "123";
 		struct sm_int i; sm_int_init(&i, c + 2, c);
 		ASSERT(i.begin == NULL);
 		ASSERT(i.end == NULL);
 	}
-	{
+	{ // init with non-NULL end
 		struct sm_int i; sm_int_init(&i, NULL, "1");
 		ASSERT(i.begin == NULL);
 		ASSERT(i.end == NULL);
 	}
-	{
-#line 69
+#line 68
+	{ // parse zero digits
 		struct sm_int i; sm_int_from_cstr(&i, "000");
 		ASSERT(i.begin == NULL);
 		ASSERT(i.end == NULL);
