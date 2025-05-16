@@ -28,6 +28,18 @@ int main(void) {
 		start = sm_int_add(NULL, buffer_end, &a, &a);
 		ASSERT(start == NULL);
 	}
+	{ // adding zero
+		char buffer[2];
+		char* buffer_end = buffer + sizeof(buffer);
+		struct sm_int a; sm_int_from_cstr(&a, "99");
+		struct sm_int z; sm_int_from_cstr(&z, "0");
+		char* start = sm_int_add(buffer, buffer_end, &a, &z);
+		ASSERT(start == buffer);
+		ASSERT(memcmp(start, "99", 2) == 0);
+		start = sm_int_add(buffer, buffer_end, &z, &a);
+		ASSERT(start == buffer);
+		ASSERT(memcmp(start, "99", 2) == 0);
+	}
 #line 177
 	{ // add number to itself
 		char buffer[5];
