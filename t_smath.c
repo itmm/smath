@@ -2,7 +2,7 @@
 #include <assert.h>
 #include <stdbool.h>
 #include <stdio.h>
-#line 206 "1_naturals.md"
+#line 221 "1_naturals.md"
 #include <string.h>
 #line 90 "a_build-system.md"
 
@@ -14,7 +14,7 @@ int test_count = 0;
 
 int main(void) {
 	// TESTS
-#line 267 "1_naturals.md"
+#line 282 "1_naturals.md"
 	{ // add with NULL arguments
 		char buffer[5];
 		char* buffer_end = buffer + sizeof(buffer);
@@ -51,7 +51,7 @@ int main(void) {
 		char* start = sm_int_add(buffer, buffer_end, &a, &a);
 		ASSERT(start == NULL);
 	}
-#line 209
+#line 224
 	{ // add number to itself
 		char buffer[5];
 		char* buffer_end = buffer + sizeof(buffer);
@@ -59,6 +59,14 @@ int main(void) {
 		char* start = sm_int_add(buffer, buffer_end, &a, &a);
 		ASSERT(start == buffer_end - 4);
 		ASSERT(memcmp(start, "1024", 4) == 0);
+	}
+#line 203
+	{ // check sm_int_is_0
+		struct sm_int z; sm_int_from_cstr(&z, "000");
+		struct sm_int v; sm_int_from_cstr(&v, "1");
+		ASSERT(sm_int_is_0(&z));
+		ASSERT(! sm_int_is_0(NULL));
+		ASSERT(! sm_int_is_0(&v));
 	}
 #line 137
 	{ // parse simple number

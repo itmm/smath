@@ -195,6 +195,21 @@ bool sm_int_is_0(sm_int_p num) {
 }
 ```
 
+Test in `t_smath.c`:
+
+```c
+// ...
+	// TESTS
+	{ // check sm_int_is_0
+		struct sm_int z; sm_int_from_cstr(&z, "000");
+		struct sm_int v; sm_int_from_cstr(&v, "1");
+		ASSERT(sm_int_is_0(&z));
+		ASSERT(! sm_int_is_0(NULL));
+		ASSERT(! sm_int_is_0(&v));
+	}
+// ...
+```
+
 ## Zahlen addieren
 
 Formulieren wir zuerst wieder einen Test in `t_smath.c`, der Beschreibt, wie

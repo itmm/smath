@@ -34,7 +34,7 @@ void sm_int_init(sm_int_p num, const char* begin, const char* end) {
 bool sm_int_is_0(sm_int_p num) {
 	return num && ! num->begin;
 }
-#line 244
+#line 259
 
 char* sm_int_add(char* begin, char* end, const sm_int_p a, const sm_int_p b) {
 	if (! begin || ! a || ! b || end < begin) { return NULL; }
