@@ -21,6 +21,7 @@ Hier die Implementierung im Header `smath.h`:
 	};
 
 	typedef struct sm_int* sm_int_p;
+
 // ...
 ```
 
@@ -33,7 +34,7 @@ geht davon aus, dass der Speicher über die Laufzeit der Instanz konstant
 bleibt.
 
 
-### `NULL` repräsentiern 0
+### `NULL` repräsentiert 0
 
 Wenn `begin` gleich `NULL` ist, dann muss auch `end` gleich `NULL` sein. Die
 repräsentierte Zahl ist 0. So kann die Zahl 0 ohne zusätzlichen Speicher
@@ -77,10 +78,16 @@ Dazu muss in `smath.h` erst einmal die Prototypen zum Initialisiern eines
 Integers angegeben werden:
 
 ```c
-// ....
+// ...
+
+// ...
+
+// ...
 
 	void sm_int_from_cstr(sm_int_p num, const char* cstr);
 	void sm_int_init(sm_int_p num, const char* begin, const char* end);
+
+// ...
 ```
 
 Die Initialisierung von einem C-String in `smath.c` ruft einfach die andere
@@ -162,6 +169,21 @@ haben:
 // ...
 ```
 
+In `smath.h` wird eine Funktion hinzugefügt, um auf 0 zu prüfen:
+
+```c
+// ...
+
+// ...
+
+// ...
+
+// ...
+
+	bool sm_int_is_0(sm_int_p num);
+
+// ...
+```
 
 ## Zahlen addieren
 
@@ -188,11 +210,21 @@ die Addition von Statten gehen soll:
 Zuerst muss wieder der Prototyp in `smath.h` deklariert werden:
 
 ```c
-// ....
+// ...
+
+// ...
+
+// ...
+
+// ...
+
+// ...
 
 	char* sm_int_add(
 		char* begin, char* end, const sm_int_p a, const sm_int_p b
 	);
+
+// ...
 ```
 
 In `smath.c` erfolgt die Implementierung:
@@ -246,6 +278,17 @@ Weitere Tests in `t_smath.c`:
 		start = sm_int_add(buffer, buffer_end, &z, &a);
 		ASSERT(start == buffer);
 		ASSERT(memcmp(start, "99", 2) == 0);
+		start = sm_int_add(buffer, buffer_end, &z, &z);
+		ASSERT(start == buffer_end);
+		start = sm_int_add(buffer, buffer, &z, &z);
+		ASSERT(start == buffer);
+	}
+	{ // not enough room
+		char buffer[2];
+		char* buffer_end = buffer + sizeof(buffer);
+		struct sm_int a; sm_int_from_cstr(&a, "50");
+		char* start = sm_int_add(buffer, buffer_end, &a, &a);
+		ASSERT(start == NULL);
 	}
 // ...
 ```
