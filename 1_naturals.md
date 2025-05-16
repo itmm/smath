@@ -185,6 +185,16 @@ In `smath.h` wird eine Funktion hinzugefügt, um auf 0 zu prüfen:
 // ...
 ```
 
+Die Implementierung in `smath.c`:
+
+```c
+// ....
+
+bool sm_int_is_0(sm_int_p num) {
+	return num && ! num->begin;
+}
+```
+
 ## Zahlen addieren
 
 Formulieren wir zuerst wieder einen Test in `t_smath.c`, der Beschreibt, wie

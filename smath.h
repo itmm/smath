@@ -17,7 +17,7 @@
 #line 183
 	bool sm_int_is_0(sm_int_p num);
 
-#line 223
+#line 233
 	char* sm_int_add(
 		char* begin, char* end, const sm_int_p a, const sm_int_p b
 	);
