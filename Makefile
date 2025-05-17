@@ -1,7 +1,7 @@
 .PHONY: clean
 .PHONY: all tests
 
-CFLAGS += -std=c17 -Wall -pedantic
+CFLAGS += -std=c17 -Wall -pedantic -Werror
 
 %.o:%.c
 	@echo "  building" $@
