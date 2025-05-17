@@ -308,11 +308,114 @@ Weitere Tests in `t_smath.c`:
 		start = sm_int_add(buffer, buffer, &z, &z);
 		ASSERT(start == buffer);
 	}
-	{ // not enough room
+	{ // not enough room in add
 		char buffer[2];
 		char* buffer_end = buffer + sizeof(buffer);
 		struct sm_int a; sm_int_from_cstr(&a, "50");
 		char* start = sm_int_add(buffer, buffer_end, &a, &a);
+		ASSERT(start == NULL);
+	}
+// ...
+```
+
+In `smath.h`:
+
+```c
+// ...
+
+// ...
+
+// ...
+
+// ...
+
+// ...
+
+// ...
+
+	char* sm_int_sub(
+		char* begin, char* end, const sm_int_p a, const sm_int_p b
+	);
+
+// ...
+```
+
+In `smath.c`:
+
+```c
+// ....
+
+char* sm_int_sub(char* begin, char* end, const sm_int_p a, const sm_int_p b) {
+	if (! begin || ! a || ! b || end < begin) { return NULL; }
+	char *result = end;
+	const char* cur_a = a->end;
+	const char* cur_b = b->end;
+	int borrow = 0;
+	while (cur_a > a->begin || cur_b > b->begin) {
+		int value = -borrow; borrow = 0;
+		if (cur_a > a->begin) { value += *--cur_a - '0'; }
+		if (cur_b > b->begin) { value -= *--cur_b - '0'; }
+		if (value < 0) { value = 10 + value; borrow = 1; }
+		if (result <= begin) { return NULL; }
+		*--result = value + '0';
+	}
+	if (borrow) { return NULL; } // a < b;
+	while (result < end && *result == '0') { ++result; }
+	return result;
+}
+```
+
+In `t_smath.c`:
+
+```c
+// ...
+	// TESTS
+	{ // simple sub
+		char buffer[3];
+		char* buffer_end = buffer + sizeof(buffer);
+		struct sm_int a; sm_int_from_cstr(&a, "100");
+		struct sm_int b; sm_int_from_cstr(&b, "56");
+		char* start = sm_int_sub(buffer, buffer_end, &a, &b);
+		ASSERT(start == buffer + 1);
+		ASSERT(memcmp(start, "44", 2) == 0);
+		start = sm_int_sub(buffer, buffer_end, &b, &a);
+		ASSERT(start == NULL);
+		start = sm_int_sub(buffer, buffer_end, &a, &a);
+		ASSERT(start == buffer_end);
+	}
+	{ // sub with NULL arguments
+		char buffer[5];
+		char* buffer_end = buffer + sizeof(buffer);
+		struct sm_int a; sm_int_from_cstr(&a, "512");
+		char* start = sm_int_sub(buffer, buffer_end, &a, NULL);
+		ASSERT(start == NULL);
+		start = sm_int_sub(buffer, buffer_end, NULL, &a);
+		ASSERT(start == NULL);
+		start = sm_int_sub(buffer, NULL, &a, &a);
+		ASSERT(start == NULL);
+		start = sm_int_add(NULL, buffer_end, &a, &a);
+		ASSERT(start == NULL);
+	}
+	{ // subtracting zero
+		char buffer[2];
+		char* buffer_end = buffer + sizeof(buffer);
+		struct sm_int a; sm_int_from_cstr(&a, "99");
+		struct sm_int z; sm_int_from_cstr(&z, "0");
+		char* start = sm_int_sub(buffer, buffer_end, &a, &z);
+		ASSERT(start == buffer);
+		ASSERT(memcmp(start, "99", 2) == 0);
+		start = sm_int_sub(buffer, buffer_end, &z, &a);
+		ASSERT(start == NULL);
+		start = sm_int_sub(buffer, buffer_end, &z, &z);
+		ASSERT(start == buffer_end);
+		start = sm_int_sub(buffer, buffer, &z, &z);
+		ASSERT(start == buffer);
+	}
+	{ // not enough room in sub
+		char buffer[2];
+		char* buffer_end = buffer + sizeof(buffer);
+		struct sm_int a; sm_int_from_cstr(&a, "200");
+		char* start = sm_int_sub(buffer, buffer_end, &a, &a);
 		ASSERT(start == NULL);
 	}
 // ...

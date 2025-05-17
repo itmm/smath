@@ -14,7 +14,56 @@ int test_count = 0;
 
 int main(void) {
 	// TESTS
-#line 282 "1_naturals.md"
+#line 373 "1_naturals.md"
+	{ // simple sub
+		char buffer[3];
+		char* buffer_end = buffer + sizeof(buffer);
+		struct sm_int a; sm_int_from_cstr(&a, "100");
+		struct sm_int b; sm_int_from_cstr(&b, "56");
+		char* start = sm_int_sub(buffer, buffer_end, &a, &b);
+		ASSERT(start == buffer + 1);
+		ASSERT(memcmp(start, "44", 2) == 0);
+		start = sm_int_sub(buffer, buffer_end, &b, &a);
+		ASSERT(start == NULL);
+		start = sm_int_sub(buffer, buffer_end, &a, &a);
+		ASSERT(start == buffer_end);
+	}
+	{ // sub with NULL arguments
+		char buffer[5];
+		char* buffer_end = buffer + sizeof(buffer);
+		struct sm_int a; sm_int_from_cstr(&a, "512");
+		char* start = sm_int_sub(buffer, buffer_end, &a, NULL);
+		ASSERT(start == NULL);
+		start = sm_int_sub(buffer, buffer_end, NULL, &a);
+		ASSERT(start == NULL);
+		start = sm_int_sub(buffer, NULL, &a, &a);
+		ASSERT(start == NULL);
+		start = sm_int_add(NULL, buffer_end, &a, &a);
+		ASSERT(start == NULL);
+	}
+	{ // subtracting zero
+		char buffer[2];
+		char* buffer_end = buffer + sizeof(buffer);
+		struct sm_int a; sm_int_from_cstr(&a, "99");
+		struct sm_int z; sm_int_from_cstr(&z, "0");
+		char* start = sm_int_sub(buffer, buffer_end, &a, &z);
+		ASSERT(start == buffer);
+		ASSERT(memcmp(start, "99", 2) == 0);
+		start = sm_int_sub(buffer, buffer_end, &z, &a);
+		ASSERT(start == NULL);
+		start = sm_int_sub(buffer, buffer_end, &z, &z);
+		ASSERT(start == buffer_end);
+		start = sm_int_sub(buffer, buffer, &z, &z);
+		ASSERT(start == buffer);
+	}
+	{ // not enough room in sub
+		char buffer[2];
+		char* buffer_end = buffer + sizeof(buffer);
+		struct sm_int a; sm_int_from_cstr(&a, "200");
+		char* start = sm_int_sub(buffer, buffer_end, &a, &a);
+		ASSERT(start == NULL);
+	}
+#line 282
 	{ // add with NULL arguments
 		char buffer[5];
 		char* buffer_end = buffer + sizeof(buffer);
@@ -44,7 +93,7 @@ int main(void) {
 		start = sm_int_add(buffer, buffer, &z, &z);
 		ASSERT(start == buffer);
 	}
-	{ // not enough room
+	{ // not enough room in add
 		char buffer[2];
 		char* buffer_end = buffer + sizeof(buffer);
 		struct sm_int a; sm_int_from_cstr(&a, "50");

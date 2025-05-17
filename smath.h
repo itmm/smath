@@ -22,5 +22,10 @@
 		char* begin, char* end, const sm_int_p a, const sm_int_p b
 	);
 
+#line 336
+	char* sm_int_sub(
+		char* begin, char* end, const sm_int_p a, const sm_int_p b
+	);
+
 #line 127 "a_build-system.md"
 #endif

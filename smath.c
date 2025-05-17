@@ -51,3 +51,23 @@ char* sm_int_add(char* begin, char* end, const sm_int_p a, const sm_int_p b) {
 	}
 	return result;
 }
+#line 347
+
+char* sm_int_sub(char* begin, char* end, const sm_int_p a, const sm_int_p b) {
+	if (! begin || ! a || ! b || end < begin) { return NULL; }
+	char *result = end;
+	const char* cur_a = a->end;
+	const char* cur_b = b->end;
+	int borrow = 0;
+	while (cur_a > a->begin || cur_b > b->begin) {
+		int value = -borrow; borrow = 0;
+		if (cur_a > a->begin) { value += *--cur_a - '0'; }
+		if (cur_b > b->begin) { value -= *--cur_b - '0'; }
+		if (value < 0) { value = 10 + value; borrow = 1; }
+		if (result <= begin) { return NULL; }
+		*--result = value + '0';
+	}
+	if (borrow) { return NULL; } // a < b;
+	while (result < end && *result == '0') { ++result; }
+	return result;
+}
