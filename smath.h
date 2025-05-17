@@ -1,4 +1,4 @@
-#line 124 "a_build-system.md"
+#line 126 "a_build-system.md"
 #if !defined(smath_h)
 #define smath_h
 
@@ -27,5 +27,5 @@
 		char* begin, char* end, const sm_int_p a, const sm_int_p b
 	);
 
-#line 127 "a_build-system.md"
+#line 129 "a_build-system.md"
 #endif

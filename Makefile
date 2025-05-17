@@ -3,6 +3,10 @@
 
 CFLAGS += -std=c17 -Wall -pedantic
 
+%.o:%.c
+	@echo "  building" $@
+	@$(CC) $(CFLAGS) -c $< -o $@
+
 all: extracted-ts
 	@$(MAKE) tests
 
@@ -17,12 +21,14 @@ tests: t_smath
 	@./t_smath
 
 t_smath: t_smath.o libsmath.a
-	$(CC) $^ -o $@
+	@echo building $@
+	@$(CC) $^ -o $@
 
 t_smath.o: t_smath.c smath.h
 
 libsmath.a: smath.o
-	$(AR) -cr $@ $^
+	@echo building $@
+	@$(AR) -cr $@ $^
 
 smath.o: smath.c smath.h
 

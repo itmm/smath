@@ -76,7 +76,8 @@ die Library, die statisch gelinkt wird:
 // ....
 
 t_smath: t_smath.o libsmath.a
-	$(CC) $^ -o $@
+	@echo building $@
+	@$(CC) $^ -o $@
 
 t_smath.o: t_smath.c smath.h
 ```
@@ -113,7 +114,8 @@ Object-Code.
 // ....
 
 libsmath.a: smath.o
-	$(AR) -cr $@ $^
+	@echo building $@
+	@$(AR) -cr $@ $^
 
 smath.o: smath.c smath.h
 ```
@@ -150,6 +152,10 @@ können. Dazu muss `./Makefile` angepasst werden:
 // ...
 
 CFLAGS += -std=c17 -Wall -pedantic
+
+%.o:%.c
+	@echo "  building" $@
+	@$(CC) $(CFLAGS) -c $< -o $@
 
 // ....
 

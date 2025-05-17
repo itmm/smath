@@ -1,10 +1,10 @@
-#line 87 "a_build-system.md"
+#line 88 "a_build-system.md"
 #include <assert.h>
 #include <stdbool.h>
 #include <stdio.h>
 #line 221 "1_naturals.md"
 #include <string.h>
-#line 90 "a_build-system.md"
+#line 91 "a_build-system.md"
 
 #include "smath.h"
 
@@ -156,6 +156,6 @@ int main(void) {
 		ASSERT(i.begin == NULL);
 		ASSERT(i.end == NULL);
 	}
-#line 99 "a_build-system.md"
+#line 100 "a_build-system.md"
 	printf("%d tests ok\n", test_count);
 }
