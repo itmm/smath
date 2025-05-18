@@ -151,7 +151,7 @@ können. Dazu muss `./Makefile` angepasst werden:
 .PHONY: clean
 // ...
 
-CFLAGS += -std=c17 -Wall -pedantic -Werror
+CFLAGS += -std=c17 -Wall -Wextra -pedantic -Werror
 
 %.o:%.c
 	@echo "  building" $@
