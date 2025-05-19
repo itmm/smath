@@ -31,7 +31,7 @@ Hier ist die Extraktion in der Datei `./Makefile`:
 .PHONY: all tests
 
 all: extracted-ts
-	@$(MAKE) tests
+	@$(MAKE) --no-print-directory tests
 
 extracted-ts: $(wildcard *.md)
 	@echo "extracting source code"

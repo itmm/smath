@@ -8,7 +8,7 @@ CFLAGS += -std=c17 -Wall -Wextra -Wpedantic -Werror
 	@$(CC) $(CFLAGS) -c $< -o $@
 
 all: extracted-ts
-	@$(MAKE) tests
+	@$(MAKE) --no-print-directory tests
 
 extracted-ts: $(wildcard *.md)
 	@echo "extracting source code"
