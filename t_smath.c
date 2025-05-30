@@ -2,7 +2,7 @@
 #include <assert.h>
 #include <stdbool.h>
 #include <stdio.h>
-#line 221 "1_naturals.md"
+#line 211 "1_naturals.md"
 #include <string.h>
 #line 91 "a_build-system.md"
 
@@ -14,7 +14,7 @@ int test_count = 0;
 
 int main(void) {
 	// TESTS
-#line 373 "1_naturals.md"
+#line 345 "1_naturals.md"
 	{ // simple sub
 		char buffer[3];
 		char* buffer_end = buffer + sizeof(buffer);
@@ -63,7 +63,7 @@ int main(void) {
 		char* start = sm_int_sub(buffer, buffer_end, &a, &a);
 		ASSERT(start == NULL);
 	}
-#line 282
+#line 264
 	{ // add with NULL arguments
 		char buffer[5];
 		char* buffer_end = buffer + sizeof(buffer);
@@ -100,7 +100,7 @@ int main(void) {
 		char* start = sm_int_add(buffer, buffer_end, &a, &a);
 		ASSERT(start == NULL);
 	}
-#line 224
+#line 214
 	{ // add number to itself
 		char buffer[5];
 		char* buffer_end = buffer + sizeof(buffer);
@@ -109,7 +109,7 @@ int main(void) {
 		ASSERT(start == buffer_end - 4);
 		ASSERT(memcmp(start, "1024", 4) == 0);
 	}
-#line 203
+#line 193
 	{ // check sm_int_is_0
 		struct sm_int z; sm_int_from_cstr(&z, "000");
 		struct sm_int v; sm_int_from_cstr(&v, "1");
@@ -117,7 +117,7 @@ int main(void) {
 		ASSERT(! sm_int_is_0(NULL));
 		ASSERT(! sm_int_is_0(&v));
 	}
-#line 137
+#line 133
 	{ // parse simple number
 		const char* c = "123";
 		struct sm_int i; sm_int_from_cstr(&i, c);

@@ -10,19 +10,19 @@
 
 	typedef struct sm_int* sm_int_p;
 
-#line 87
+#line 83
 	void sm_int_from_cstr(sm_int_p num, const char* cstr);
 	void sm_int_init(sm_int_p num, const char* begin, const char* end);
 
-#line 183
+#line 173
 	bool sm_int_is_0(sm_int_p num);
 
-#line 248
+#line 230
 	char* sm_int_add(
 		char* begin, char* end, const sm_int_p a, const sm_int_p b
 	);
 
-#line 336
+#line 308
 	char* sm_int_sub(
 		char* begin, char* end, const sm_int_p a, const sm_int_p b
 	);

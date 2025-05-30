@@ -78,11 +78,7 @@ Dazu muss in `smath.h` erst einmal die Prototypen zum Initialisiern eines
 Integers angegeben werden:
 
 ```c
-// ...
-
-// ...
-
-// ...
+// ...3
 
 	void sm_int_from_cstr(sm_int_p num, const char* cstr);
 	void sm_int_init(sm_int_p num, const char* begin, const char* end);
@@ -172,13 +168,7 @@ haben:
 In `smath.h` wird eine Funktion hinzugefügt, um auf 0 zu prüfen:
 
 ```c
-// ...
-
-// ...
-
-// ...
-
-// ...
+// ...4
 
 	bool sm_int_is_0(sm_int_p num);
 
@@ -235,15 +225,7 @@ die Addition von Statten gehen soll:
 Zuerst muss wieder der Prototyp in `smath.h` deklariert werden:
 
 ```c
-// ...
-
-// ...
-
-// ...
-
-// ...
-
-// ...
+// ...5
 
 	char* sm_int_add(
 		char* begin, char* end, const sm_int_p a, const sm_int_p b
@@ -321,17 +303,7 @@ Weitere Tests in `t_smath.c`:
 In `smath.h`:
 
 ```c
-// ...
-
-// ...
-
-// ...
-
-// ...
-
-// ...
-
-// ...
+// ...6
 
 	char* sm_int_sub(
 		char* begin, char* end, const sm_int_p a, const sm_int_p b

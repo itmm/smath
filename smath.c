@@ -1,12 +1,12 @@
 #line 135 "a_build-system.md"
 #include <stdbool.h>
 #include <stdlib.h>
-#line 99 "1_naturals.md"
+#line 95 "1_naturals.md"
 #include <string.h>
 #line 137 "a_build-system.md"
 
 #include "smath.h"
-#line 101 "1_naturals.md"
+#line 97 "1_naturals.md"
 
 void sm_int_from_cstr(sm_int_p num, const char* cstr) {
 	if (cstr) {
@@ -15,7 +15,7 @@ void sm_int_from_cstr(sm_int_p num, const char* cstr) {
 		sm_int_init(num, NULL, NULL);
 	}
 }
-#line 116
+#line 112
 
 void sm_int_init(sm_int_p num, const char* begin, const char* end) {
 	if (! num) { return; }
@@ -29,12 +29,12 @@ void sm_int_init(sm_int_p num, const char* begin, const char* end) {
 	num->begin = begin;
 	num->end = end;
 }
-#line 192
+#line 182
 
 bool sm_int_is_0(sm_int_p num) {
 	return num && ! num->begin;
 }
-#line 259
+#line 241
 
 char* sm_int_add(char* begin, char* end, const sm_int_p a, const sm_int_p b) {
 	if (! begin || ! a || ! b || end < begin) { return NULL; }
@@ -51,7 +51,7 @@ char* sm_int_add(char* begin, char* end, const sm_int_p a, const sm_int_p b) {
 	}
 	return result;
 }
-#line 347
+#line 319
 
 char* sm_int_sub(char* begin, char* end, const sm_int_p a, const sm_int_p b) {
 	if (! begin || ! a || ! b || end < begin) { return NULL; }
